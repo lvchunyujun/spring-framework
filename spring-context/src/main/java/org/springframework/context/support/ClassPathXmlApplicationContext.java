@@ -137,9 +137,22 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	public ClassPathXmlApplicationContext(
 			String[] configLocations, boolean refresh, @Nullable ApplicationContext parent)
 			throws BeansException {
-
+		/**
+		 * 1. 创建默认的类加载器  Thread.currentThread().getContextClassLoader();
+		 * 2. 创建解析器         PathMatchingResourcePatternResolver
+		 */
 		super(parent);
+		/**
+		 * 1. 创建资源环境   StandardEnvironment
+		 * 2. 通过资源环境创建通配符解析器
+		 * 3. 解析XML资源文件
+		 */
 		setConfigLocations(configLocations);
+		/**
+		 * **************
+		 * 刷新容器
+		 * **************
+		 */
 		if (refresh) {
 			refresh();
 		}

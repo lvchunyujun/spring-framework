@@ -81,7 +81,7 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 	}
 
 
-	/**
+	/**使用以下资源编辑器填充给定的注册表
 	 * Populate the given {@code registry} with the following resource editors:
 	 * ResourceEditor, InputStreamEditor, InputSourceEditor, FileEditor, URLEditor,
 	 * URIEditor, ClassEditor, ClassArrayEditor.

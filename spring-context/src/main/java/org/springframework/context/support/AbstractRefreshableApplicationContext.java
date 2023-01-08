@@ -64,9 +64,17 @@ import org.springframework.lang.Nullable;
  */
 public abstract class AbstractRefreshableApplicationContext extends AbstractApplicationContext {
 
+	/**
+	 * 设置是否允许通过注册具有相同名称的不同定义来覆盖bean定义，并自动替换前者。否则，将引发异常。
+	 * 默认值为“true”。
+	 */
 	@Nullable
 	private Boolean allowBeanDefinitionOverriding;
 
+	/**
+	 * 设置是否允许bean之间的循环引用并自动尝试解析它们。
+	 * 默认值为“true”。关闭此选项可在遇到循环引用时引发异常，完全不允许循环引用。
+	 */
 	@Nullable
 	private Boolean allowCircularReferences;
 

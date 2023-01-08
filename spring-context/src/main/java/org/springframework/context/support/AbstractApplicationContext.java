@@ -515,42 +515,81 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {
+		// 刷新容器，可能引起并发操作。需要同步操作
 		synchronized (this.startupShutdownMonitor) {
-			// Prepare this context for refreshing.
+			/**
+			 * Prepare this context for refreshing.
+			 * step1: 为刷新准备上下文
+			 * 1.设置容器启动时间
+			 * 2.设置容器关闭状态FALSE(AtomicBoolean)
+			 * 3.设置容器活动状态TRUE(AtomicBoolean)
+			 * 4.初始化系统上下文占位符（子类实现）
+			 * 5.获取Environment（新建StandardEnvironment对象并加载系统属性和环境属性），并检查环境中必须的参数
+			 * 6.准备监听器和事件的集合对象，初始化为null
+			 */
 			prepareRefresh();
 
-			// Tell the subclass to refresh the internal bean factory.
+			/**
+			 * Tell the subclass to refresh the internal bean factory.
+			 * 1. 解析Bean.XML配置文件，组装成BeanDefinition
+			 * 2. 将组装成BeanDefinition注册到BeanFactory
+			 */
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
-			// Prepare the bean factory for use in this context.
+			/**
+			 * Prepare the bean factory for use in this context.
+			 * 设置和注册BeanFactory的一些属性及配置
+			 */
 			prepareBeanFactory(beanFactory);
 
 			try {
-				// Allows post-processing of the bean factory in context subclasses.
+				/**
+				 * Allows post-processing of the bean factory in context subclasses.
+				 * 允许上下文子类对BeanFactory后置处理器扩展（子类扩展）
+				 * 默认没有实现由子类进行扩展
+				 */
 				postProcessBeanFactory(beanFactory);
 
-				// Invoke factory processors registered as beans in the context.
+				/**
+				 * Invoke factory processors registered as beans in the context.
+				 * 可以自由扩展，修改beanFactory中的相关信息，但是使用最多的是对BeanDefinition的修改操作
+				 */
 				invokeBeanFactoryPostProcessors(beanFactory);
 
-				// Register bean processors that intercept bean creation.
+				/**
+				 * Register bean processors that intercept bean creation.
+ 				 */
 				registerBeanPostProcessors(beanFactory);
 
-				// Initialize message source for this context.
+				/**
+				 * Initialize message source for this context.
+				 */
 				initMessageSource();
 
-				// Initialize event multicaster for this context.
+				/**
+				 * Initialize event multicaster for this context.
+ 				 */
 				initApplicationEventMulticaster();
 
-				// Initialize other special beans in specific context subclasses.
+				/**
+				 * Initialize other special beans in specific context subclasses.
+				 */
 				onRefresh();
 
-				// Check for listener beans and register them.
+				/**
+				 * Check for listener beans and register them.
+				 */
 				registerListeners();
 
-				// Instantiate all remaining (non-lazy-init) singletons.
+				/**
+				 * Instantiate all remaining (non-lazy-init) singletons.
+				 * 完成对象的创建（核心方法）
+				 */
 				finishBeanFactoryInitialization(beanFactory);
 
-				// Last step: publish corresponding event.
+				/**
+				 * Last step: publish corresponding event.
+				 */
 				finishRefresh();
 			}
 
@@ -859,7 +898,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Register a default embedded value resolver if no BeanFactoryPostProcessor
 		// (such as a PropertySourcesPlaceholderConfigurer bean) registered any before:
 		// at this point, primarily for resolution in annotation attribute values.
-		if (!beanFactory.hasEmbeddedValueResolver()) {
+ 		if (!beanFactory.hasEmbeddedValueResolver()) {
 			beanFactory.addEmbeddedValueResolver(strVal -> getEnvironment().resolvePlaceholders(strVal));
 		}
 
