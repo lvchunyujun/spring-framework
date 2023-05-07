@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<context:annotation-config/>
+	<context:component-scan base-package="org.springframework.lcyj" />
 	<!--<bean id="userService" class="org.springframework.service.UserService">
 	</bean>-->
-	<bean id="userServiceFactoryBean" class="org.springframework.factorybean.UserServiceFactoryBean">
+	<!-- 方式1：将自定义的BeanFactoryPostProcess加载到Spring -->
+<!--	<bean class="org.springframework.lcyj.postProcess.MyBeanDefinitionRegistorPostProcess"/>-->
+	<bean id="userServiceFactoryBean" class="org.springframework.lcyj.factorybean.UserServiceFactoryBean">
 	</bean>
+	<bean id="user" class="org.springframework.lcyj.models.User">
+		<property name="id" value="1"/>
+		<property name="userName" value="张三"/>
+		<property name="address" value="山东省_日照市_莒县"/>
+	</bean>
+	<!-- 方法1： 通过EditorConfigurer注册器 -->
+	    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+			<property name="propertyEditorRegistrars">
+				<list>
+					<bean class="org.springframework.lcyj.postProcess.beanFactory.AddressPropertiesEitorRegistry"/>
+				</list>
+			</property>
+		</bean>
+	<!-- 方法2： 通过直接设置 Eitor -->
+<!--	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">-->
+<!--		<property name="customEditors">-->
+<!--			<map>-->
+<!--				<entry key="org.springframework.lcyj.models.Address">-->
+<!--					<value>org.springframework.lcyj.postProcess.beanFactory.AddressPropertyEditor</value>-->
+<!--				</entry>-->
+<!--			</map>-->
+<!--		</property>-->
+<!--	</bean>-->
 </beans>

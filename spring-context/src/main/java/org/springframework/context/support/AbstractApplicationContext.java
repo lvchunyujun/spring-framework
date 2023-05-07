@@ -494,7 +494,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * to the internal BeanFactory.
 	 */
 	public List<BeanFactoryPostProcessor> getBeanFactoryPostProcessors() {
-		return this.beanFactoryPostProcessors;
+                                        		return this.beanFactoryPostProcessors;
 	}
 
 	@Override
@@ -546,7 +546,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				/**
 				 * Allows post-processing of the bean factory in context subclasses.
 				 * 允许上下文子类对BeanFactory后置处理器扩展（子类扩展）
-				 * 默认没有实现由子类进行扩展
+				 * 默认没有实现由子类进行扩展（spring-web实现）
 				 */
 				postProcessBeanFactory(beanFactory);
 
@@ -687,7 +687,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		// Tell the internal bean factory to use the context's class loader etc.
 		beanFactory.setBeanClassLoader(getClassLoader());
 		beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
-		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
+		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));          // 资源编辑注册器，CustomEditorConfigurer
 
 		// Configure the bean factory with context callbacks.
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
@@ -700,6 +700,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 		// BeanFactory interface not registered as resolvable type in a plain factory.
 		// MessageSource registered (and found for autowiring) as a bean.
+		// 设置几个自动装配的特殊规则，当进行在Ioc初始化的几个实现类时，那么就使用指定的实现对象进行注入
 		beanFactory.registerResolvableDependency(BeanFactory.class, beanFactory);
 		beanFactory.registerResolvableDependency(ResourceLoader.class, this);
 		beanFactory.registerResolvableDependency(ApplicationEventPublisher.class, this);

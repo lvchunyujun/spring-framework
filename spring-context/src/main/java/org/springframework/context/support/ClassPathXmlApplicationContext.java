@@ -151,6 +151,9 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 		/**
 		 * **************
 		 * 刷新容器
+		 * 1. 配置文件加载解析
+		 * 2. 将配置信息生成BeanDefinition并加载
+		 * 3. Bean实例化并注册到容器中
 		 * **************
 		 */
 		if (refresh) {

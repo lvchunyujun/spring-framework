@@ -1,4 +1,4 @@
-package org.springframework.service;
+package org.springframework.lcyj.service;
 
 public class UserService {
 
