@@ -297,10 +297,10 @@ public abstract class AnnotationConfigUtils {
 
 		Set<AnnotationAttributes> result = new LinkedHashSet<>();
 
-		// Direct annotation present?
+		// Direct annotation present?      step1: 直接注解
 		addAttributesIfNotNull(result, metadata.getAnnotationAttributes(annotationClassName, false));
 
-		// Container annotation present?
+		// Container annotation present?   step2: 容器的注解
 		Map<String, Object> container = metadata.getAnnotationAttributes(containerClassName, false);
 		if (container != null && container.containsKey("value")) {
 			for (Map<String, Object> containedAttributes : (Map<String, Object>[]) container.get("value")) {

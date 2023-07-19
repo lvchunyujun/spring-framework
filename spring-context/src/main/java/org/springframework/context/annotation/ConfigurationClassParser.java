@@ -246,7 +246,7 @@ class ConfigurationClassParser {
 
 		// Recursively process the configuration class and its superclass hierarchy.
 		SourceClass sourceClass = asSourceClass(configClass, filter);
-		do {
+		do {   // step: 开始实际的解析处理
 			sourceClass = doProcessConfigurationClass(configClass, sourceClass, filter);
 		}
 		while (sourceClass != null);
@@ -307,7 +307,7 @@ class ConfigurationClassParser {
 			}
 		}
 
-		// Process any @Import annotations
+		// Process any @Import annotations  step: getImports()识别到注解为import的类，并进行实例化操作
 		processImports(configClass, sourceClass, getImports(sourceClass), filter, true);
 
 		// Process any @ImportResource annotations
@@ -517,8 +517,8 @@ class ConfigurationClassParser {
 	 * Returns {@code @Import} class, considering all meta-annotations.
 	 */
 	private Set<SourceClass> getImports(SourceClass sourceClass) throws IOException {
-		Set<SourceClass> imports = new LinkedHashSet<>();
-		Set<SourceClass> visited = new LinkedHashSet<>();
+		Set<SourceClass> imports = new LinkedHashSet<>();      // 最终要导入的类
+		Set<SourceClass> visited = new LinkedHashSet<>();      // 存放递归关系的import集合
 		collectImports(sourceClass, imports, visited);
 		return imports;
 	}

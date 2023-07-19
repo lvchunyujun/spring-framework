@@ -7,14 +7,15 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.lcyj.models.User;
 
-public class MyBeanDefinitionRegistorPostProcess implements BeanDefinitionRegistryPostProcessor {
+public class MyBeanDefinitionRegistorPostProcess implements BeanDefinitionRegistryPostProcessor, PriorityOrdered {
 	@Override
 	public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
 		System.out.println("执行了MyBeanDefinitionRegistorPostProcess.postProcessBeanFactory--》");
-		BeanDefinition user = beanFactory.getBeanDefinition("user");
-		user.setDescription("用户信息");
+//		BeanDefinition user = beanFactory.getBeanDefinition("user");
+//		user.setDescription("用户信息");
 
 
 	}
@@ -22,8 +23,16 @@ public class MyBeanDefinitionRegistorPostProcess implements BeanDefinitionRegist
 	@Override
 	public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
 		System.out.println("执行了MyBeanDefinitionRegistorPostProcess.postProcessBeanDefinitionRegistry--》");
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(User.class);
-		builder.addPropertyValue("userName", "张三");
-		registry.registerBeanDefinition("user",builder.getBeanDefinition());
+//		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(User.class);
+//		builder.addPropertyValue("userName", "张三");
+//		registry.registerBeanDefinition("user",builder.getBeanDefinition());
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(MySelfBeanDefinitionRegistorPostProcess.class);
+
+		registry.registerBeanDefinition("mySelfBeanDefinitionRegistorPostProcess",builder.getBeanDefinition());
+	}
+
+	@Override
+	public int getOrder() {
+		return 0;
 	}
 }
